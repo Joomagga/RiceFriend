@@ -24,6 +24,11 @@ import java.util.Date;
 
 /**
  * Created by walk1 on 2016-05-07.
+ * The Socket Program based on BobChinGu.
+ *
+ * Methods:
+ * public DBConnection(DBResponse): class which uses requires to implement DBResponse.
+ * public void requestAllRoomList: it
  */
 
 public class DBConnection {
@@ -32,7 +37,7 @@ public class DBConnection {
     private String getRooms = "getRooms.php";
     private String getRoomMember = "getRoomMember.php";
     private String addRoom = "addRoom.php";
-    private String addRoomMember = "addRoomMember.php";
+    private String addMember = "addRoomMember.php";
     private String deleteRoomMember = "deleteRoomMember.php";
 
     public DBConnection(DBResponse context)
@@ -42,7 +47,7 @@ public class DBConnection {
 
     public void makeRoom(RoomInfo room)
     {
-        class AccessDatabase extends AsyncTask<String, Void, String>
+        class MakeRoom extends AsyncTask<String, Void, String>
         {
             @Override
             protected void onPreExecute()
@@ -94,7 +99,7 @@ public class DBConnection {
             }
         }
 
-        AccessDatabase task = new AccessDatabase();
+        MakeRoom task = new MakeRoom();
         String time = new SimpleDateFormat("HHmm").format(new Date(System.currentTimeMillis()));
         task.execute(room.getMaster()+"", room.getMsg(), room.getLocation(), room.getTime()+"", time);
     }
@@ -208,7 +213,7 @@ public class DBConnection {
 
     public void addRoomMember(int room, int newMember)
     {
-        class AccessDatabase extends AsyncTask<String, Void, String>
+        class AddRoomMember extends AsyncTask<String, Void, String>
         {
             @Override
             protected void onPreExecute()
@@ -227,10 +232,11 @@ public class DBConnection {
             {
                 try
                 {
+                    Log.d("debug", "Line A");
                     String query = URLEncoder.encode("room_id", "UTF-8") + "=" + URLEncoder.encode(params[0], "UTF-8");
                     query += "&" + URLEncoder.encode("room_member", "UTF-8") + "=" + URLEncoder.encode(params[1], "UTF-8");
 
-                    URL url = new URL(url_s+addRoomMember);
+                    URL url = new URL(url_s+addMember);
                     URLConnection conn = url.openConnection();
 
                     conn.setDoOutput(true);
@@ -257,7 +263,8 @@ public class DBConnection {
             }
         }
 
-        AccessDatabase task = new AccessDatabase();
+        Log.d("debug", "Line B");
+        AddRoomMember task = new AddRoomMember();
         task.execute(room+"", newMember+"");
     }
 
@@ -336,7 +343,7 @@ public class DBConnection {
                 throw (new NoRoomException());
             for (int i = 0; i < rooms.length(); i++) {
                 JSONObject c = rooms.getJSONObject(i);
-                RoomInfo room = new RoomInfo(c.getString("id"), c.getString("master"), c.getString("msg"), c.getString("location"), c.getString("time"), c.getString("uptime"));
+                RoomInfo room = new RoomInfo(c.getString("id"), c.getString("master"), c.getString("msg"), c.getString("location"), c.getString("time"), c.getString("uptime"), c.getString("name"), c.getString("count"));
                 roomsList.add(room);
             }
         } catch (JSONException e) {

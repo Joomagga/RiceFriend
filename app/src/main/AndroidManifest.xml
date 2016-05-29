@@ -15,6 +15,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Join"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Main_content"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Main_content2"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Main_content3"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

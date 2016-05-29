@@ -8,10 +8,12 @@ import java.util.ArrayList;
 public class RoomInfo {
     private int id;
     private int master;
+    private String name;
     private String msg;
     private String location;
     private int time;
     private int uptime;
+    private int member;
     private ArrayList<Integer> memberList;
 
     public RoomInfo(int master, String msg, String location, int time, int uptime)
@@ -20,6 +22,7 @@ public class RoomInfo {
         this.msg = msg;
         this.location = location;
         this.time = time;
+        this.uptime = uptime;
     }
 
     public RoomInfo(String master, String msg, String location, String time)
@@ -38,7 +41,7 @@ public class RoomInfo {
         this.time = time;
     }
 
-    public RoomInfo(String id, String master, String msg, String location, String time, String uptime)
+    public RoomInfo(String id, String master, String msg, String location, String time, String uptime, String name, String member)
     {
         this.id = Integer.parseInt(id);
         this.master = Integer.parseInt(master);
@@ -46,6 +49,8 @@ public class RoomInfo {
         this.location = location;
         this.time = Integer.parseInt(time);
         this.uptime = Integer.parseInt(uptime);
+        this.name = name;
+        this.member = Integer.parseInt(member);
     }
 
     public RoomInfo(String id, String master, String msg, String location, String time, String uptime, ArrayList<Integer> members)
@@ -59,14 +64,24 @@ public class RoomInfo {
         this.memberList = members;
     }
 
+    public String getNumberOfMembers()
+    {
+        return Integer.toString(this.member);
+    }
+
     public int getId()
     {
-            return id;
+        return id;
     }
 
     public int getMaster()
     {
         return master;
+    }
+
+    public String getMasterName()
+    {
+        return name;
     }
 
     public String getMsg()
@@ -79,14 +94,32 @@ public class RoomInfo {
         return location;
     }
 
-    public int getTime()
+    private String timeToString(int t)
     {
-        return time;
+        int hour = t / 100;
+        String hh;
+        if (hour < 10)
+            hh = "0" + Integer.toString(hour);
+        else
+            hh = Integer.toString(hour);
+
+        int minute = t % 100;
+        String mm;
+        if (minute < 10)
+            mm = "0" + Integer.toString(minute);
+        else
+            mm = Integer.toString(minute);
+
+        return hh + ":" + mm;
+    }
+    public String getTime()
+    {
+        return timeToString(time);
     }
 
-    public int getUploadTime()
+    public String getUploadTime()
     {
-        return uptime;
+        return timeToString(uptime);
     }
 
     public ArrayList<Integer> getMembers()

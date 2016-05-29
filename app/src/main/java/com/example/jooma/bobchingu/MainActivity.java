@@ -1,46 +1,38 @@
 package com.example.jooma.bobchingu;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
+public class MainActivity extends AppCompatActivity {
 
-import java.util.ArrayList;
-
-public class MainActivity extends AppCompatActivity implements DBResponse {
-
-    DBConnection con;
+    Button login, join;
+    Intent Go_Board, Go_Join;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        con = new DBConnection(this);
-        // con.makeRoom(new RoomInfo(1027204170, "please work", "Gachon", 0400));
 
-        con.deleteRoomMember(23, 1099683324);
-        con.requestRoomMember(23);
-    }
+        Go_Board = new Intent(this, Main_content.class);
+        Go_Join = new Intent(this, Join.class);
 
-    public void getRoomList(ArrayList<RoomInfo> roomsList)
-    {
-    }
+        login = (Button)findViewById(R.id.login);
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(Go_Board);
+            }
+        });
 
-    public void getRoomMemberList(ArrayList<Integer> memberList)
-    {
-        TextView tv = (TextView) findViewById(R.id.tv);
-        String member = "Member List \n";
-
-        for (int i=0; i<memberList.size(); i++)
-            member = member + memberList.get(i) + "\n";
-
-        tv.setText(member);
+        join = (Button)findViewById(R.id.join);
+        join.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                startActivity(Go_Join);
+            }
+        });
     }
 }
