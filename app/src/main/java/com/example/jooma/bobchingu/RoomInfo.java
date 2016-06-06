@@ -1,5 +1,7 @@
 package com.example.jooma.bobchingu;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 /**
@@ -110,6 +112,7 @@ public class RoomInfo {
         else
             mm = Integer.toString(minute);
 
+        Log.d("debug","time="+hh+mm);
         return hh + ":" + mm;
     }
     public String getTime()

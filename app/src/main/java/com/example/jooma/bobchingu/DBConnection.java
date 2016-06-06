@@ -16,11 +16,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.sql.Array;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by walk1 on 2016-05-07.
@@ -101,8 +103,9 @@ public class DBConnection {
 
         MakeRoom task = new MakeRoom();
         String time = new SimpleDateFormat("HHmm").format(new Date(System.currentTimeMillis()));
-        task.execute(room.getMaster()+"", room.getMsg(), room.getLocation(), room.getTime()+"", time);
+        task.execute(room.getMaster()+"", room.getMsg(), room.getLocation(), room.getTime(), time);
     }
+
 
     public void requestAllRoomsList() throws NoRoomException
     {
@@ -232,7 +235,6 @@ public class DBConnection {
             {
                 try
                 {
-                    Log.d("debug", "Line A");
                     String query = URLEncoder.encode("room_id", "UTF-8") + "=" + URLEncoder.encode(params[0], "UTF-8");
                     query += "&" + URLEncoder.encode("room_member", "UTF-8") + "=" + URLEncoder.encode(params[1], "UTF-8");
 
@@ -263,7 +265,6 @@ public class DBConnection {
             }
         }
 
-        Log.d("debug", "Line B");
         AddRoomMember task = new AddRoomMember();
         task.execute(room+"", newMember+"");
     }
@@ -331,6 +332,11 @@ public class DBConnection {
     public void deleteRoomMember(RoomInfo room, int member)
     {
         this.deleteRoomMember(room.getId(), member);
+    }
+
+    public void syncFriendship(ArrayList<Integer> friend)
+    {
+
     }
 
     private ArrayList<RoomInfo> JSON2ArrayListRoomInfo(String data)
