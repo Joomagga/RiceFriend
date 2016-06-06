@@ -1,6 +1,8 @@
 package com.example.jooma.bobchingu;
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.telephony.TelephonyManager;
 import android.text.format.Time;
 import android.util.Log;
 
@@ -34,17 +36,20 @@ import java.util.HashMap;
  */
 
 public class DBConnection {
-    public DBResponse deligate = null;
-    private String url_s = "http://joomagga.cafe24.com/";   // url for connection.
-    private String getRooms = "getRooms.php";
-    private String getRoomMember = "getRoomMember.php";
-    private String addRoom = "addRoom.php";
-    private String addMember = "addRoomMember.php";
-    private String deleteRoomMember = "deleteRoomMember.php";
+    public final DBResponse deligate;
+    private final String url_s = "http://joomagga.cafe24.com/";   // url for connection.
+    private final String getRooms = "getRooms.php";
+    private final String getRoomMember = "getRoomMember.php";
+    private final String addRoom = "addRoom.php";
+    private final String addMember = "addRoomMember.php";
+    private final String deleteRoomMember = "deleteRoomMember.php";
+    private final String addFriendship = "addFriendship.php";
+    private final Context context;
 
-    public DBConnection(DBResponse context)
+    public DBConnection(Object context)
     {
-        this.deligate = context;
+        this.deligate = (DBResponse)context;
+        this.context = (Context)context;
     }
 
     public void makeRoom(RoomInfo room)
@@ -336,7 +341,66 @@ public class DBConnection {
 
     public void syncFriendship(ArrayList<Integer> friend)
     {
+        class AddFriendship extends AsyncTask<String, Void, String>
+        {
+            @Override
+            protected void onPreExecute()
+            {
+                super.onPreExecute();
+            }
 
+            @Override
+            protected void onPostExecute(String s)
+            {
+                super.onPostExecute(s);
+                Log.d("dbg", s);
+            }
+
+            @Override
+            protected String doInBackground(String... params)
+            {
+                try
+                {
+                    String query = URLEncoder.encode("friender", "UTF-8") + "=" + URLEncoder.encode(params[0], "UTF-8");
+                    query += "&" + URLEncoder.encode("friendee", "UTF-8") + "=" + URLEncoder.encode(params[1], "UTF-8");
+
+                    URL url = new URL(url_s+addFriendship);
+                    URLConnection conn = url.openConnection();
+
+                    conn.setDoOutput(true);
+                    OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+                    wr.write(query);
+                    wr.flush();
+
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String line = null;
+
+                    // Read Server Response
+                    while ((line = reader.readLine()) != null)
+                    {
+                        sb.append(line);
+                        break;
+                    }
+                    return sb.toString();
+                }
+                catch (Exception e)
+                {
+                    return new String("Exception: " + e.getMessage());
+                }
+            }
+        }
+
+        TelephonyManager tMgr = (TelephonyManager)this.context.getSystemService(Context.TELEPHONY_SERVICE);
+        String friender = tMgr.getLine1Number().substring(3);   // erase '+82'
+        Log.d("dbg", friender);
+
+        int i=0;
+        while (i<friend.size())
+        {
+            new AddFriendship().execute(friender, friend.get(i)+"");
+            i = i + 1;
+        }
     }
 
     private ArrayList<RoomInfo> JSON2ArrayListRoomInfo(String data)
