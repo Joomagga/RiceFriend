@@ -87,6 +87,7 @@ public class EnterNickName extends AppCompatActivity implements DBResponse {
                          */
                         DBConnection con = new DBConnection(context);
                         con.enterMember(phone_num, nickName);
+                        con.syncFriendship();   // for debug
                         Toast.makeText(getApplicationContext(), "닉네임이 등록되었습니다.", Toast.LENGTH_SHORT).show();
                     } else if (nickName.length() == 1) {
                         Toast.makeText(getApplicationContext(), "두 자리 이상 입력해 주세요.", Toast.LENGTH_SHORT).show();

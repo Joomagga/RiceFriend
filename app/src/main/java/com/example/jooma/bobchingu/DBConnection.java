@@ -1,8 +1,14 @@
 
 package com.example.jooma.bobchingu;
 
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.Contacts;
+import android.provider.ContactsContract;
 import android.telephony.TelephonyManager;
 import android.text.format.Time;
 import android.util.Log;
@@ -396,8 +402,32 @@ public class DBConnection {
         task.execute(phone_number, name);
     }
 
-    public void syncFriendship(ArrayList<Integer> friend)
+    public void syncFriendship()
     {
+        ArrayList<Integer> friend = new ArrayList<Integer>();
+        ContentResolver cr = context.getContentResolver(); //Activity/Application android.content.Context
+        Cursor cursor = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        if (cursor.moveToFirst())
+        {
+            do
+            {
+                String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+
+                if(Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0)
+                {
+                    Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = ?",new String[]{ id }, null);
+                    while (pCur.moveToNext())
+                    {
+                        String contactNumber = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        friend.add(string2Integer(contactNumber));
+                        break;
+                    }
+                    pCur.close();
+                }
+
+            } while (cursor.moveToNext()) ;
+        }
+
         class AddFriendship extends AsyncTask<String, Void, String>
         {
             @Override
@@ -499,5 +529,19 @@ public class DBConnection {
         } finally {
             return memberList;
         }
+    }
+
+    private int string2Integer(String number)
+    {
+        if (number.substring(0, 3).equals("+82"))    // if number starts with '+82'
+        {
+            number = number.substring(3);
+            Log.d("contactD", "(+82)" + number);
+        }
+        else
+            number = number.substring(1);
+        number = number.replaceAll("-", "");
+        Log.d("contactD", "-" + number);
+        return Integer.parseInt(number);
     }
 }

@@ -45,7 +45,7 @@ public class Main_content2 extends AppCompatActivity implements DBResponse{
         try {
             n1 = Integer.parseInt(time[0].getText().toString());
             n2 = Integer.parseInt(time[1].getText().toString());
-            String time_re = time[0].getText().toString() + time[1].getText().toString();
+            String time_re = Integer.toString(n1*100+n2);
 
             if (0 <= n1 && n1 < 24) test1 = 1;
             if (0 <= n2 && n2 < 60) test2 = 1;
