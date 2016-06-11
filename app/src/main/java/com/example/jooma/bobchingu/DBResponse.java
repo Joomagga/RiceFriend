@@ -9,3 +9,4 @@ public interface DBResponse {
     void getRoomList(ArrayList<RoomInfo> data);
     void getRoomMemberList(ArrayList<Integer> data);
 }
+

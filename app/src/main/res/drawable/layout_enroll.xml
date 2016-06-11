@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 평상시 -->
+    <item android:state_focused="false" android:state_pressed="false">
+        <shape>
+            <corners android:radius="10dp" />
+            <solid android:color="#5D5D5D" />
+            <stroke android:color="#E0FFFF" android:width="5dp" />
+            <padding android:bottom="15dp" android:left="15dp"
+                android:right="15dp" android:top="15dp" />
+        </shape>
+    </item>
+
+</selector>

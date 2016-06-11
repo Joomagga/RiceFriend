@@ -1,7 +1,7 @@
 package com.example.jooma.bobchingu;
 
 /**
- * Created by jooma on 2016-05-14.
+ * Created by Hyunwoo on 2016-05-16.
  */
 public class NoRoomException extends Exception {
     private String message = "NoRoomException: There is no room";

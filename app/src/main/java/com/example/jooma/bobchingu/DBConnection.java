@@ -1,3 +1,4 @@
+
 package com.example.jooma.bobchingu;
 
 import android.content.Context;
@@ -44,6 +45,7 @@ public class DBConnection {
     private final String addMember = "addRoomMember.php";
     private final String deleteRoomMember = "deleteRoomMember.php";
     private final String addFriendship = "addFriendship.php";
+    private final String enterNewMember = "enterMember.php";
     private final Context context;
 
     public DBConnection(Object context)
@@ -110,7 +112,6 @@ public class DBConnection {
         String time = new SimpleDateFormat("HHmm").format(new Date(System.currentTimeMillis()));
         task.execute(room.getMaster()+"", room.getMsg(), room.getLocation(), room.getTime(), time);
     }
-
 
     public void requestAllRoomsList() throws NoRoomException
     {
@@ -337,6 +338,62 @@ public class DBConnection {
     public void deleteRoomMember(RoomInfo room, int member)
     {
         this.deleteRoomMember(room.getId(), member);
+    }
+
+    public void enterMember(String phone_number, String name)
+    {
+        class EnterMember extends AsyncTask<String, Void, String>
+        {
+            @Override
+            protected void onPreExecute()
+            {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected void onPostExecute(String s)
+            {
+                super.onPostExecute(s);
+                Log.d("DBConnection", "enterMember: " + s);
+            }
+
+            @Override
+            protected String doInBackground(String... params)
+            {
+                try
+                {
+                    String query = URLEncoder.encode("phone_number", "UTF-8") + "=" + URLEncoder.encode(params[0], "UTF-8");
+                    query += "&" + URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(params[1], "UTF-8");
+
+                    URL url = new URL(url_s+enterNewMember);
+                    URLConnection conn = url.openConnection();
+
+                    conn.setDoOutput(true);
+                    OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+                    wr.write(query);
+                    wr.flush();
+
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String line = null;
+
+                    // Read Server Response
+                    while ((line = reader.readLine()) != null)
+                    {
+                        sb.append(line);
+                        break;
+                    }
+                    return sb.toString();
+                }
+                catch (Exception e)
+                {
+                    return new String("Exception: " + e.getMessage());
+                }
+            }
+        }
+
+        EnterMember task = new EnterMember();
+        task.execute(phone_number, name);
     }
 
     public void syncFriendship(ArrayList<Integer> friend)
