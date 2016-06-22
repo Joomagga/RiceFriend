@@ -7,92 +7,130 @@ import java.util.ArrayList;
  * Created by jooma on 2016-05-11.
  */
 public class RoomInfo {
-    private int id;
-    private int master;
-    private String name;
-    private String msg;
-    private String location;
-    private int time;
-    private int uptime;
-    private int member;
-    private ArrayList<Integer> memberList;
+    private int mId;
+    private int mMaster;
+    private String mMasterName;
+    private String mMsg;
+    private String mLocation;
+    private int mTime;
+    private int mUploadTime;
+    private int mNumberOfMemberlist;
+    private ArrayList<Integer> mMemberList;
 
-    public RoomInfo(int master, String msg, String location, int time, int uptime)
+    // Constructor Methods
+    public RoomInfo()
     {
-        this.master = master;
-        this.msg = msg;
-        this.location = location;
-        this.time = time;
-        this.uptime = uptime;
-    }
-
-    public RoomInfo(String master, String msg, String location, String time)
-    {
-        this.master = Integer.parseInt(master);
-        this.msg = msg;
-        this.location = location;
-        this.time = Integer.parseInt(time);
+        mId = -1;
+        mMaster = -1;
+        mMasterName = null;
+        mMsg = null;
+        mLocation = null;
+        mTime = -1;
+        mUploadTime = -1;
+        mNumberOfMemberlist = 0;
+        mMemberList = new ArrayList<Integer>();
     }
 
     public RoomInfo(int master, String msg, String location, int time)
     {
-        this.master = master;
-        this.msg = msg;
-        this.location = location;
-        this.time = time;
+        this(-1, master, msg, location, time, -1);
     }
 
-    public RoomInfo(String id, String master, String msg, String location, String time, String uptime, String name, String member)
+    public RoomInfo(int id, int master, String msg, String location, int time, int uptime, String masterName, int numberOfMembers) {
+        this();
+        mId = id;
+        mMaster = master;
+        mMsg = msg;
+        mLocation = location;
+        mTime = time;
+        mUploadTime = uptime;
+        mMasterName = masterName;
+    }
+
+    public RoomInfo(int id, int master, String msg, String location, int time, int uptime) {
+        this();
+
+        mId = id;
+        mMaster = master;
+        mMsg = msg;
+        mLocation = location;
+        mTime = time;
+        mUploadTime = uptime;
+    }
+
+    // Setter Methods.
+    public void setId(int id)
     {
-        this.id = Integer.parseInt(id);
-        this.master = Integer.parseInt(master);
-        this.msg = msg;
-        this.location = location;
-        this.time = Integer.parseInt(time);
-        this.uptime = Integer.parseInt(uptime);
-        this.name = name;
-        this.member = Integer.parseInt(member);
+        mId = id;
     }
 
-    public RoomInfo(String id, String master, String msg, String location, String time, String uptime, ArrayList<Integer> members)
+    public void setMaster(int master)
     {
-        this.id = Integer.parseInt(id);
-        this.master = Integer.parseInt(master);
-        this.msg = msg;
-        this.location = location;
-        this.time = Integer.parseInt(time);
-        this.uptime = Integer.parseInt(uptime);
-        this.memberList = members;
+        mMaster = master;
     }
 
-    public String getNumberOfMembers()
+    public void setMasterName(String name)
     {
-        return Integer.toString(this.member);
+        mMasterName = name;
     }
 
+    public void setMsg(String msg)
+    {
+        mMsg = msg;
+    }
+
+    public void setLocation(String location) {
+        mLocation = location;
+    }
+
+    public void setTime(int time) {
+        mTime = time;
+    }
+
+    public void setUploadTime(int uploadTime) {
+        mUploadTime = uploadTime;
+    }
+
+    public void setMemberList(ArrayList<Integer> memberList) {
+        mMemberList = memberList;
+    }
+
+    // Getter Methods.
     public int getId()
     {
-        return id;
+        return mId;
     }
 
     public int getMaster()
     {
-        return master;
+        return mMaster;
     }
 
     public String getMasterName()
     {
-        return name;
+        return mMasterName;
     }
 
     public String getMsg()
     {
-        return msg;
+        return mMsg;
     }
 
     public String getLocation()
     {
-        return location;
+        return mLocation;
+    }
+
+    public String getTime() {
+        return timeToString(mTime);
+    }
+
+    public String getUploadTime() {
+        return timeToString(mUploadTime);
+    }
+
+    public int getNumberOfMembers() {
+        return mMemberList.size();
     }
 
     private String timeToString(int t)
@@ -112,29 +150,5 @@ public class RoomInfo {
             mm = Integer.toString(minute);
 
         return hh + mm;
-    }
-    public String getTime()
-    {
-        return timeToString(time);
-    }
-
-    public String getUploadTime()
-    {
-        return timeToString(uptime);
-    }
-
-    public ArrayList<Integer> getMembers()
-    {
-        return memberList;
-    }
-
-    public void setMemberList(ArrayList<Integer> newList)
-    {
-        this.memberList = newList;
-    }
-
-    public void addMember(int member)
-    {
-        memberList.add(member);
     }
 }

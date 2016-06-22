@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
@@ -8,44 +9,50 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="40dp"
-    tools:context="com.example.hyunwoo.ui_project01.MainActivity">
+    tools:context="com.example.jooma.bobchingu.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Phone number" />
-
-    <EditText
-        android:id="@+id/PN"
-        android:inputType="number"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Password"/>
-
-    <EditText
-        android:id="@+id/PW"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/login"
-            android:layout_width="162dp"
+            android:id="@+id/Eat"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Login"/>
+            android:background="@drawable/xml_border"
+            android:text="밥먹자" />
 
         <Button
-            android:id="@+id/join"
-            android:layout_width="162dp"
+            android:layout_weight="1"
+            android:id="@+id/Enroll"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Join"/>
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/xml_border"
+            android:text="등록하기" />
+
+        <Button
+            android:id="@+id/NewFriend"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/xml_border"
+            android:text="지금공강" />
+
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <!--
+        <fragment
+            android:name="com.example.jooma.bobchingu.RoomListFragment"
+            android:id="@+id/fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    -->
 </LinearLayout>

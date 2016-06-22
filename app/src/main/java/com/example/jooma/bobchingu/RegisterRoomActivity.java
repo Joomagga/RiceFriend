@@ -2,50 +2,44 @@ package com.example.jooma.bobchingu;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-
-public class Main_content2 extends AppCompatActivity implements DBResponse{
+public class RegisterRoomActivity extends AppCompatActivity {
 
     Button confirm;
-    DBConnection con;
+    SyncServerService con;
     EditText[] time = new EditText[2]; // int형
     EditText place; // string
     EditText content; // string
-    Intent goToBoard;
+
+    RegisterRoomActivity() {
+        con = new SyncServerService(this);
+    }
 
     //
-    private String getPhoneNumber(){
-        TelephonyManager tMgr = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
+    private String getPhoneNumber() {
+        TelephonyManager tMgr = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         String phone_num = tMgr.getLine1Number().substring(3);   // erase '+82'
 
         return phone_num;
     }
 
-    private  void TestAndConfirm(){
+    private void TestAndConfirm() {
 
-        int test1=0, test2=0; // Test the time.
-        int test3=0; // Test the empty content in 장소
+        int test1 = 0, test2 = 0; // Test the time.
+        int test3 = 0; // Test the empty content in 장소
         int n1, n2;  // 시간, 분
 
         try {
             n1 = Integer.parseInt(time[0].getText().toString());
             n2 = Integer.parseInt(time[1].getText().toString());
-            String time_re = Integer.toString(n1*100+n2);
+            String time_re = time[0].getText().toString() + time[1].getText().toString();
 
             if (0 <= n1 && n1 < 24) test1 = 1;
             if (0 <= n2 && n2 < 60) test2 = 1;
@@ -54,9 +48,9 @@ public class Main_content2 extends AppCompatActivity implements DBResponse{
             if (test1 * test2 * test3 == 1) {
                 Toast.makeText(getApplicationContext(), "등록되었습니다." +
                         Integer.parseInt(time_re), Toast.LENGTH_SHORT).show();
-                con.makeRoom(new RoomInfo(Integer.parseInt(getPhoneNumber()), content.getText().toString(),
+                con.registerRoom(new RoomInfo(Integer.parseInt(getPhoneNumber()), content.getText().toString(),
                         place.getText().toString(), Integer.parseInt(time_re)));
-                startActivity(goToBoard);
+                startActivity(new Intent(this, MainActivity.class));
             } else if (test1 == 0 || test2 == 0) {
                 Toast.makeText(getApplicationContext(), "(시/분)을 확인해주세요.", Toast.LENGTH_SHORT).show();
             } else if (test3 == 0) {
@@ -64,7 +58,7 @@ public class Main_content2 extends AppCompatActivity implements DBResponse{
             } else {
                 Toast.makeText(getApplicationContext(), "입력란을 확인해주세요.", Toast.LENGTH_SHORT).show();
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), "내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
         }
@@ -73,21 +67,15 @@ public class Main_content2 extends AppCompatActivity implements DBResponse{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_content2);
+        setContentView(R.layout.activity_register_room);
 
-        Toast.makeText(getApplicationContext(), getPhoneNumber(), Toast.LENGTH_SHORT).show();
+        time[0] = (EditText) findViewById(R.id.Time0);
+        time[1] = (EditText) findViewById(R.id.Time1);
 
-        con = new DBConnection(this);
+        place = (EditText) findViewById(R.id.Place);
+        content = (EditText) findViewById(R.id.Content);
 
-        time[0] = (EditText)findViewById(R.id.Time0);
-        time[1] = (EditText)findViewById(R.id.Time1);
-
-        place = (EditText)findViewById(R.id.Place);
-        content = (EditText)findViewById(R.id.Content);
-
-        confirm = (Button)findViewById(R.id.Confirm);
-        goToBoard = new Intent(this, Main_content.class);
-
+        confirm = (Button) findViewById(R.id.Confirm);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,15 +83,5 @@ public class Main_content2 extends AppCompatActivity implements DBResponse{
                 TestAndConfirm();
             }
         });
-    }
-
-    public void getRoomList(ArrayList<RoomInfo> roomsList)
-    {
-
-    }
-
-    public void getRoomMemberList(ArrayList<Integer> memberList)
-    {
-
     }
 }
